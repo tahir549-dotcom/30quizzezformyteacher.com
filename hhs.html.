@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Quiz World</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e8f0f2;
+    color: #333;
+}
+header {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+header h1 {
+    margin: 0;
+    font-size: 3em;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #16a085;
+    flex-wrap: wrap;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+nav a:hover {
+    background-color: #1abc9c;
+}
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+h2 {
+    color: #16a085;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #16a085;
+    padding-bottom: 5px;
+}
+.quiz {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.quiz button {
+    background-color: #16a085;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.quiz button:hover {
+    background-color: #1abc9c;
+}
+#score {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 1.2em;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Geography Quiz World</h1>
+    <p>Test your geography knowledge with 30 questions!</p>
+</header>
+
+<nav>
+    <a href="#quiz">Quiz</a>
+</nav>
+
+<main>
+    <section id="quiz">
+        <h2>Interactive Geography Quiz</h2>
+        <div class="quiz" id="quiz-container"></div>
+        <p id="score">Score: 0 / 0</p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Geography Quiz World. All Rights Reserved.</p>
+</footer>
+
+<script>
+const quizData = [
+{ q: "Which continent is the largest by area?", options: ["Asia", "Africa", "Europe"], answer: "Asia" },
+{ q: "What is the longest river in the world?", options: ["Nile", "Amazon", "Yangtze"], answer: "Nile" },
+{ q: "Mount Everest is located in which country?", options: ["Nepal", "India", "China"], answer: "Nepal" },
+{ q: "Which desert is the largest in the world?", options: ["Sahara", "Gobi", "Kalahari"], answer: "Sahara" },
+{ q: "Which ocean is the deepest?", options: ["Pacific", "Atlantic", "Indian"], answer: "Pacific" },
+{ q: "Which country has the most population?", options: ["China", "India", "USA"], answer: "China" },
+{ q: "The Great Barrier Reef is in which country?", options: ["Australia", "USA", "South Africa"], answer: "Australia" },
+{ q: "Which is the smallest continent?", options: ["Australia", "Europe", "Antarctica"], answer: "Australia" },
+{ q: "Which is the largest country by area?", options: ["Russia", "Canada", "USA"], answer: "Russia" },
+{ q: "Which country is known as the Land of the Rising Sun?", options: ["Japan", "China", "Thailand"], answer: "Japan" },
+{ q: "Which continent is known as the Dark Continent?", options: ["Africa", "Asia", "Europe"], answer: "Africa" },
+{ q: "Which river flows through Egypt?", options: ["Nile", "Amazon", "Mississippi"], answer: "Nile" },
+{ q: "Which mountain range separates Europe and Asia?", options: ["Ural", "Himalayas", "Andes"], answer: "Ural" },
+{ q: "Which desert is found in China and Mongolia?", options: ["Gobi", "Sahara", "Thar"], answer: "Gobi" },
+{ q: "Which is the largest island in the world?", options: ["Greenland", "Madagascar", "Borneo"], answer: "Greenland" },
+{ q: "Which country has the largest population in Africa?", options: ["Nigeria", "Egypt", "South Africa"], answer: "Nigeria" },
+{ q: "Which is the highest waterfall in the world?", options: ["Angel Falls", "Niagara", "Victoria Falls"], answer: "Angel Falls" },
+{ q: "Which river is the longest in South America?", options: ["Amazon", "Parana", "Orinoco"], answer: "Amazon" },
+{ q: "Which US state is known for the Grand Canyon?", options: ["Arizona", "California", "Colorado"], answer: "Arizona" },
+{ q: "Which country has the most volcanoes?", options: ["Indonesia", "Japan", "USA"], answer: "Indonesia" },
+{ q: "Which continent has the most countries?", options: ["Africa", "Europe", "Asia"], answer: "Africa" },
+{ q: "Which is the largest lake in the world?", options: ["Caspian Sea", "Lake Superior", "Lake Victoria"], answer: "Caspian Sea" },
+{ q: "Which desert is in India and Pakistan?", options: ["Thar", "Kalahari", "Gobi"], answer: "Thar" },
+{ q: "Which ocean is the smallest?", options: ["Arctic", "Indian", "Atlantic"], answer: "Arctic" },
+{ q: "Which country has the longest coastline?", options: ["Canada", "Australia", "Russia"], answer: "Canada" },
+{ q: "Which mountain is the tallest in Africa?", options: ["Kilimanjaro", "Atlas", "Drakensberg"], answer: "Kilimanjaro" },
+{ q: "Which river flows through Baghdad?", options: ["Tigris", "Euphrates", "Nile"], answer: "Tigris" },
+{ q: "Which desert is known for its red sand?", options: ["Sahara", "Namib", "Gobi"], answer: "Namib" },
+{ q: "Which country is completely landlocked?", options: ["Switzerland", "Japan", "Egypt"], answer: "Switzerland" },
+{ q: "Which is the longest mountain range in the world?", options: ["Andes", "Rockies", "Himalayas"], answer: "Andes" }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const quizContainer = document.getElementById("quiz-container");
+const scoreDisplay = document.getElementById("score");
+
+function showQuestion() {
+    if(currentQuestion >= quizData.length){
+        quizContainer.innerHTML = `<h3>Quiz Completed! Your final score is ${score} / ${quizData.length}.</h3>`;
+        return;
+    }
+    const q = quizData[currentQuestion];
+    let html = `<p>${q.q}</p>`;
+    q.options.forEach(option => {
+        html += `<button onclick="checkAnswer('${option}')">${option}</button>`;
+    });
+    quizContainer.innerHTML = html;
+}
+
+function checkAnswer(selected){
+    if(selected === quizData[currentQuestion].answer){
+        score++;
+        alert("Correct! ✅");
+    } else {
+        alert(`Incorrect ❌. The correct answer was ${quizData[currentQuestion].answer}.`);
+    }
+    currentQuestion++;
+    scoreDisplay.innerText = `Score: ${score} / ${currentQuestion}`;
+    showQuestion();
+}
+
+// Initialize quiz
+showQuestion();
+</script>
+
+</body>
+</html>
